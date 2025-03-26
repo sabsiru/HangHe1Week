@@ -5,6 +5,8 @@ import io.hhplus.tdd.database.UserPointTable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PointService {
@@ -41,5 +43,15 @@ public class PointService {
         pointHistoryTable.insert(used.id(),amount,TransactionType.USE, System.currentTimeMillis());
 
         return used;
+    }
+
+    //포인트 내역 조회
+    public List<PointHistory> getPointHistories(long userId) {
+        List<PointHistory> pointHistories = pointHistoryTable.selectAllByUserId(userId);
+
+            if (pointHistories.isEmpty()) {
+                throw new IllegalArgumentException("포인트 충전 및 사용 내역이 없습니다.");
+            }
+        return pointHistories;
     }
 }
